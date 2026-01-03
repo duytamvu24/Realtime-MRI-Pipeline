@@ -164,9 +164,9 @@ Repeat the steps from **1.2** by clicking **“Starte Analyse Belastung”**.
 
 ### Step 2: Run Korrelation_EXE
 <p align="center">
-  <img src="readme_bilder/korrelation1.PNG" width="200" style="margin-right:10px;">
-  <img src="readme_bilder/korrelation2.PNG" width="200" style="margin-right:10px;">
-  <img src="readme_bilder/korrelation5.PNG" width="200">
+  <img src="readme_bilder/korrelation1.PNG" width="400" style="margin-right:10px;">
+  <img src="readme_bilder/korrelation2.PNG" width="400" style="margin-right:10px;">
+  <img src="readme_bilder/korrelation5.PNG" width="400">
 </p>
 
 
