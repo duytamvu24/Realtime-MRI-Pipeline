@@ -118,8 +118,8 @@ These image sequences can subsequently be analyzed in **Circle** and compared wi
 ### Step 1: Run the Spirometry Module
 <p align="center">
   <img src="readme_bilder/spiro_modul1.PNG" width="200" style="margin-right:10px;">
-  <img src="readme_bilder/spiro_modul2.PNG" width="200" style="margin-right:10px;">
-  <img src="readme_bilder/spiro_modul3.PNG" width="200">
+  <img src="readme_bilder/spiro_modul2.PNG" width="250" style="margin-right:10px;">
+  <img src="readme_bilder/spiro_modul3.PNG" width="300">
 </p>
 #### 1.1 Enter Required Metadata
 - Enter the **start time of the measurement**  
