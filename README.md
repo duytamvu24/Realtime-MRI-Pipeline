@@ -119,6 +119,9 @@ These image sequences can subsequently be analyzed in **Circle** and compared wi
 ![Spirometry module interface](readme_bilder/spiro_modul1.PNG)
 ![Spirometry module interface](readme_bilder/spiro_modul2.PNG)
 ![Spirometry module interface](readme_bilder/spiro_modul3.PNG)
+<p align="center">
+  <img src="readme_bilder/readme_bilder/spiro_modul3.PNG" width="400">
+</p>
 #### 1.1 Enter Required Metadata
 - Enter the **start time of the measurement**  
   Format: `hh:mm:ss` (e.g. `00:00:00`)
