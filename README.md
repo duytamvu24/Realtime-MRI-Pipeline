@@ -116,6 +116,7 @@ These image sequences can subsequently be analyzed in **Circle** and compared wi
 ## How to Use
 
 ### Step 1: Run the Spirometry Module
+![Spirometry module interface](readme_bilder/spiro_modul1.png)
 
 #### 1.1 Enter Required Metadata
 - Enter the **start time of the measurement**  
@@ -131,7 +132,7 @@ If the exact times are not known yet:
 - Enter values **1–4** to select an ECG channel to inspect the spirometry signal
 - Identify the correct timestamps within the displayed data
 - Restart the program and enter the correct times
-
+![Spirometry module interface](readme_bilder/spiro_gui.png)
 ---
 
 #### 1.2 Run Analysis – Rest Phase
