@@ -163,9 +163,12 @@ Repeat the steps from **1.2** by clicking **“Starte Analyse Belastung”**.
 ---
 
 ### Step 2: Run Korrelation_EXE
-![Korrelation_EXE](readme_bilder/korrelation1.PNG)
-![Korrelation_EXE](readme_bilder/korrelation2.PNG)
-![Korrelation_EXE](readme_bilder/korrelation5.PNG)
+<p align="center">
+  <img src="readme_bilder/korrelation1.PNG" width="200" style="margin-right:10px;">
+  <img src="readme_bilder/korrelation2.PNG" width="200" style="margin-right:10px;">
+  <img src="readme_bilder/korrelation5.PNG" width="200">
+</p>
+
 
 #### 2.1 Load Data
 - Select the **ECG file** and **spirometry file**
