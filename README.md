@@ -118,7 +118,6 @@ These image sequences can subsequently be analyzed in **Circle** and compared wi
 ### Step 1: Run the Spirometry Module
 ![Spirometry module interface](readme_bilder/spiro_modul1.PNG)
 ![Spirometry module interface](readme_bilder/spiro_modul2.PNG)
-![Spirometry module interface](readme_bilder/spiro_modul3.PNG)
 <p align="center">
   <img src="readme_bilder/spiro_modul3.PNG" width="400">
 </p>
