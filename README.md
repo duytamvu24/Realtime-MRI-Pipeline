@@ -194,9 +194,12 @@ Spirometry and ECG signals are now plotted together:
 ---
 
 ### Step 3: Run Finetuning_Korrelation_EXE
-![Finetuning](readme_bilder/finetuning2.PNG)
-![Finetuning](readme_bilder/finetuning3.PNG)
-![Finetuning](readme_bilder/finetuning4.PNG)
+<p align="center">
+  <img src="readme_bilder/finetuning2.PNG" width="400" style="margin-right:10px;">
+  <img src="readme_bilder/finetuning3.PNG" width="400" style="margin-right:10px;">
+  <img src="readme_bilder/finetuning4.PNG" width="400">
+</p>
+
 #### 3.1 Select Input Data
 - Select the **DICOM folder** containing the real-time images  
   Expected folder structure: path/Dicom_translated/Echtzeit_Spiroergo_XXXX/date_of_measurement/realtime_images/
