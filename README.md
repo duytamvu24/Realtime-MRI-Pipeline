@@ -122,10 +122,7 @@ These image sequences can subsequently be analyzed in **Circle** and compared wi
   <img src="readme_bilder/spiro_modul3.PNG" width="400">
 </p>
 #### 1.1 Enter Required Metadata
-- Enter the **start time of the measurement**  
-  Format: `hh:mm:ss` (e.g. `00:00:00`)
-- Enter all required time values in the same format  
-  Example: `00:15:12`
+- Enter the start and end time of rest and exercise phase: `hh:mm:ss` (e.g. `00:00:00`)
 - Enter **body weight** (kg) and **height** (cm)  
   Example: `60` and `180`
 - Click **“Datei auswählen & Start”** and select the spirometry file
