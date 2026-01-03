@@ -118,6 +118,7 @@ These image sequences can subsequently be analyzed in **Circle** and compared wi
 ### Step 1: Run the Spirometry Module
 ![Spirometry module interface](readme_bilder/spiro_modul1.PNG)
 ![Spirometry module interface](readme_bilder/spiro_modul2.PNG)
+![Spirometry module interface](readme_bilder/spiro_modul3.PNG)
 #### 1.1 Enter Required Metadata
 - Enter the **start time of the measurement**  
   Format: `hh:mm:ss` (e.g. `00:00:00`)
@@ -160,6 +161,9 @@ Repeat the steps from **1.2** by clicking **“Starte Analyse Belastung”**.
 ---
 
 ### Step 2: Run Korrelation_EXE
+![Korrelation_EXE](readme_bilder/korrelation1.PNG)
+![Korrelation_EXE](readme_bilder/korrelation2.PNG)
+![Korrelation_EXE](readme_bilder/korrelation5.PNG)
 
 #### 2.1 Load Data
 - Select the **ECG file** and **spirometry file**
@@ -185,7 +189,9 @@ Spirometry and ECG signals are now plotted together:
 ---
 
 ### Step 3: Run Finetuning_Korrelation_EXE
-
+![Finetuning](readme_bilder/finetuning2.PNG)
+![Finetuning](readme_bilder/finetuning3.PNG)
+![Finetuning](readme_bilder/finetuning4.PNG)
 #### 3.1 Select Input Data
 - Select the **DICOM folder** containing the real-time images  
   Expected folder structure: path/Dicom_translated/Echtzeit_Spiroergo_XXXX/date_of_measurement/realtime_images/
@@ -236,7 +242,7 @@ If necessary, repeat the shift adjustment using the new plot.
 ---
 
 ### Step 4: Run Spiro_into_Dicom_EXE
-
+![Spiro_into_Dicom](readme_bilder/spiro_into_dicom.PNG)
 #### 4.1 Select Required Files and Parameters
 - **Main-Pfad**: output directory for processed images
 - **Dicom-Pfad**: folder containing real-time DICOM images
