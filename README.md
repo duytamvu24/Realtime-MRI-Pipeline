@@ -121,6 +121,7 @@ These image sequences can subsequently be analyzed in **Circle** and compared wi
   <img src="readme_bilder/spiro_modul2.PNG" width="230" style="margin-right:10px;">
   <img src="readme_bilder/spiro_modul3.PNG" width="400">
 </p>
+
 #### 1.1 Enter Required Metadata
 
 - Enter the **start and end time** of rest and exercise phase: `hh:mm:ss` (e.g. `00:00:00`)
