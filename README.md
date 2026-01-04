@@ -14,13 +14,13 @@ The software was developed for research purposes, particularly for the analysis 
 
 1. **Analysis of spirometry data**
 2. **Correlation of spiro and ecg data**
-3. **Fine-tuning of the correlation using the respiratory belt signal and signal intensivity curve**
+3. **Fine-tuning of the correlation using the respiratory belt signal and the signal intensity curve extracted from a selected ROI in a single slice**
 4. **Insertion of respiratory parameters into the DICOM image data**
 - readout files
 - add spiro data into dicom tags
 - binning into 25 ecg-phases
 - binning into exspiration and inspiration of images
-- filter sequence of 25 mri images of each ecg phase in endexspiration for each slice
+- selection of 25 images, one for each ECG phase at end-expiration, from the MRI data to construct an image sequence of a single cardiac cycle for each slice
 
 
 The analysis consists of **three main scripts**.
@@ -29,7 +29,7 @@ The analysis consists of **three main scripts**.
 
 ## Module Overview
 
-### 1. Spirometry Module
+### 1. Spirometry and Gas Exchange Analysis Module
 In the spirometry module, advanced respiratory parameters are calculated from spirometry data for both resting and exercise phases.  
 This is achieved by detecting **peaks and valleys** in the respiratory flow signal.
 
@@ -46,7 +46,9 @@ This is achieved by detecting **peaks and valleys** in the respiratory flow sign
   - Minute ventilation  
   - Maximum and minimum O₂ volume fractions  
   - Maximum and minimum CO₂ volume fractions  
-  - Respiratory rate  
+  - Respiratory rate
+- further derived parametrs:
+  - oxygen uptake (VO₂), carbon dioxide production (VCO₂), respiratory exchange ratio (RER), ventilatory equivalent for oxygen (VE/VO₂)
 
 ---
 
@@ -100,7 +102,8 @@ The images are then filtered as follows:
 
 The threshold is defined as a fraction of the average tidal volume (e.g., 30%).
 
-From all images acquired during end-expiration, one representative image per slice and per ECG class is selected.
+From all images acquired during end-expiration, one representative image per slice and per ECG class is selected:
+
 
 #### Input Data
 - Spirometry file  
