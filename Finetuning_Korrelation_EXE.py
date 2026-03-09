@@ -107,7 +107,7 @@ def start_analysis():
     fig, ax = plt.subplots()
     img = ax.imshow(ArrayDicomsort[:, :, slice_init], cmap='grey')
 
-    # Klick-Handler für ROI
+    # Click-Handler for ROI
     def onclick(event):
         # function to enable clicking in the images to create a roi
         global roi_points, roi_polygon, roi_plot, point_plots
@@ -118,7 +118,7 @@ def start_analysis():
             fig.canvas.draw()
 
             if len(roi_points) == 4:
-                # Altes ROI-Polygon löschen
+                # Delete old ROI
                 print(roi_points, roi_plot)
 
                 # Polygon zeichnen
@@ -129,7 +129,7 @@ def start_analysis():
                 # ROI als Path speichern
                 roi_polygon = Path(roi_points)
 
-                # Automatisch Kurve berechnen
+                # automatically calculates curves
                 plot_signal_curve()
 
     fig.canvas.mpl_connect("button_press_event", onclick)
@@ -246,7 +246,7 @@ def finetuning():
     sig_rb_cut = sig_rb[diff_bellow_start_to_first_image_steps : diff_bellow_start_to_first_image_steps + duration_slice_bellow_steps ]
     sig_rb_cut = sig_rb_cut / np.mean(sig_rb_cut) 
     print("sig_rb_cut:" + str(len(sig_rb_cut)))
-    # Zeitskalen mit den verschiedenen Kanälen erstellen
+    # Create timelines for different channels
     import numpy as np
     # Zeitskala der Bilder
     # zweite Spalte extrahieren
@@ -272,7 +272,7 @@ def finetuning():
     # new timeline to show cut data of spiro, bellow and signalintensivity curve
     diffs = [s - seconds_list[0] for s in seconds_list]
     timescale_images = [diff*1000 for diff in diffs]
-    # Zeitskala bellow
+    # timescale bellow
     import numpy as np
     scale_bellow = np.arange(0, int(len(sig_rb_cut) * 2.5), 2.5)
     scale_flow = np.arange(0, int(len(spiro_flow) * 8), 8)
@@ -383,7 +383,7 @@ def plot_everything():
     time_last_image = datetime(1900, 1, 1, hours, minutes, seconds) + timedelta(milliseconds=ms)
     duration_slice = int((time_last_image - time_first_slice).total_seconds() * 1000)
     
-    print(f"Dauer des Slices: {duration_slice}")
+    print(f"Duration of Slices: {duration_slice}")
 
     offset_finetuning = int(shift)
     print("offset_ ist:" + str(offset_finetuning))
@@ -451,7 +451,7 @@ def plot_everything():
     ax.grid(True)
 
 
-    # --- Hover-function ---
+    # Hover function
     if hover_label is None:
         hover_label = tk.Label(root, text="x: -", font=("Arial", 10))
         hover_label.pack(pady=8)
@@ -468,22 +468,22 @@ def plot_everything():
             hover_label.config(text="x: -")
 
     fig.canvas.mpl_connect("motion_notify_event", on_hover)
-    # --- Startbereich X-Achse ---
+    # Start scale
     window = 40000
     ax.set_xlim(0, window)
 
-    # --- Canvas in Tkinter einbetten ---
+    # Canvas into Tkinter
     canvas = FigureCanvasTkAgg(fig, master=curve_frame)
     canvas.draw()
     canvas.get_tk_widget().pack(fill="both", expand=True)
 
-    # --- Scroll-Funktion ---
+    # Scroll function
     def update(val):
         pos = slider.get()
         ax.set_xlim(pos, pos + window)
         canvas.draw_idle()
 
-    # --- Slider hinzufügen ---
+    # Slider
     slider = tk.Scale(
         slider_frame,
         from_=0,
@@ -545,11 +545,11 @@ def plot_signal_curve():
     # Mittelwert pro Frame berechnen
     vol = [np.mean(ArrayDicomsort[:, :, i][mask]) for i in range(ArrayDicomsort.shape[2])]
 
-    # --- alte Kurve löschen ---
+    # delete old curves
     for widget in curve_frame.winfo_children():
         widget.destroy()
 
-    # neue Kurve plotten
+    # plot new curve
     fig2, ax2 = plt.subplots()
     ax2.plot(vol, color="blue")
     ax2.set_title("Signal intensivity curve (ROI)")
@@ -562,7 +562,7 @@ def plot_signal_curve():
 
     collecting_roi = False  # Nach 4 Punkten fertig
 
-# --- Tkinter Fenster ---
+# Tkinter window
 root = tk.Tk()
 root.title("Finetuning-Module")
 root.geometry("1200x700")
@@ -612,5 +612,6 @@ hover_label.pack(pady=9)
 
 slider_frame = tk.Frame(root)
 slider_frame.pack(pady=10)
+
 
 root.mainloop()
