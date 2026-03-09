@@ -1,4 +1,3 @@
-#clean ECG
 import numpy as np
 from scipy import signal
 #import ipywidgets as widgets
@@ -29,7 +28,7 @@ def clean_data(line):
 from datetime import timedelta
 
 def timeConverter(time_ms: int) -> str:
-    # Gesamtsekunden
+    # Total seconds
     seconds = time_ms // 1000
     # Rest-Millisekunden
     ms = time_ms % 1000
@@ -76,7 +75,7 @@ def read_spiro_data(name_spiro):
         spiro.append([float(i.replace(',','.')) for i in lineparts])
     
     spiro_resorted = list(map(list, zip(*spiro)))
-    # Liesst die Daten aus den drei Spiro-Dateien aus
+    # Reads out data from spirometry file
     file = open(name_spiro, 'r')
     lines = file.read().splitlines()
     file.close()
@@ -95,7 +94,7 @@ def calc_correction(data, start, end):
     #Integral nur der Werte über und unter null
     faktor = insp_int/exp_int
     data_corr = data.copy()
-    #Korrekturfaktor nur auf Inspiration
+    # Correction only of Spirometry
     data_corr[:][inspiration] = data[:][inspiration]/faktor
     return (data_corr, insp_int, exp_int, faktor)
 
@@ -103,12 +102,12 @@ def get_volume_from_flow(flow):
     data_corr, insp_int, exp_int, faktor = calc_correction(np.array(flow), 0,-1)
     vol_corr = np.cumsum(data_corr[:]) # komplett#
     
-    #Baseline Korrektur nach Halima
+    # baseline correction
     vol_automatic_BC = BC_vol(vol_corr,0, -1)
     new_vol_automatic_BC = vol_automatic_BC * 8 / 1000
     return new_vol_automatic_BC
 
-# automatische BC wenn das VOlumen bereits berechnet ist 
+# baseline correction of spirometry file
 def BC_vol(vol,begin,end):
     peaks_min_idx0, peaks_min = calc_all_minima(vol[begin:end],0,-1)
     #Ordnet in nestled list die peak werte mit dem index zu 
@@ -152,7 +151,6 @@ def detect_outliers(peaks_and_idx):#
     return list_min0
 
 def median_window(k,vol_intervall,new_peaks_min_idx):
-    #Kopie des Volumens
     vol_med = vol_intervall.copy()
 
     n = len(new_peaks_min_idx)
