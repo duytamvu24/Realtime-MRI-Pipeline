@@ -17,7 +17,7 @@ def read_spiro_file(filename_spiro):
     return spiro_resorted
 
 
-# ---------------- Dateiauswahl-Fenster ----------------
+# Window to select Files
 def choose_files():
     def select_ecg():
         filename = filedialog.askopenfilename(title="Select ECG-File", filetypes=[("All Files", "*.*")])
@@ -239,7 +239,7 @@ def launch_main_window(filename, filename_spiro, ecg_kanal):
         save_data_btn = ttk.Button(result_frame, text="Save data", command=save_correlated_data)
         save_data_btn.pack(pady=5)
 
-    # --- GUI ---
+    # Main Window
     root = tk.Tk()
     root.title("Temporal-Correlation")
 
@@ -278,3 +278,4 @@ def launch_main_window(filename, filename_spiro, ecg_kanal):
 # ---------------- Start ----------------
 if __name__ == "__main__":
     choose_files()
+
