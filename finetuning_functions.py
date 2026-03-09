@@ -1,4 +1,3 @@
-# in this notebook: binning scans using spirometry and ecg
 import glob
 import pydicom
 import pydicom.filewriter
@@ -18,12 +17,10 @@ import os
 import math as mt
 import pydicom as dcm
 import scipy as sc
-# Das Notebook MRI_Functions muss im gleichen Verzeichnis wie dieses Notebook liegen.
-#%run MRI_Functions_ver2.ipynb
 
 
 # function to import dicom images, their given aquisition time(sorted and not sorted) and their amount as arrays
-# function to import dicom images, their given aquisition time(sorted and not sorted) and their amount as arrays
+
 def read_dicomDir(input_dir):
     listPathDicom = []
     input_slices = os.listdir(input_dir)
@@ -51,16 +48,15 @@ def read_dicomDir(input_dir):
 
 # function to convert the aquisition time, aquired through dicom tags, into miliseconds after midnight time format
 def timeConverter(time_ms):
-    # Berechnung von Sekunden und Millisekunden
+    # Calculate seconds into milliseconds
     seconds = time_ms // 1000
     milliseconds = time_ms % 1000
-
-    # Berechnung von Stunden, Minuten, Sekunden
+    
     hours = seconds // 3600
     minutes = (seconds % 3600) // 60
     remaining_seconds = seconds % 60
 
-    # Erstellen des timedelta-Objekts mit Millisekunden
+    # time in ms
     time = timedelta(hours=hours, minutes=minutes, seconds=remaining_seconds, milliseconds=milliseconds)
     return str(time)
 
@@ -94,12 +90,12 @@ def cut_bellow_data(sig_rb ,AT, real_time_bellow):
     time_obj_first_slice = datetime.strptime(time_first_slice, "%H%M%S.%f")
     formatted_time_first_slice = time_obj_first_slice.strftime("%H:%M:%S.%f")[:-3]
     print(formatted_time_first_slice)
-    #Berechne die letzte Zeit vom letzten Bild
+    # Calculate time of last image
     time_last_slice = str(AT[-1][1])
     last_obj_last_slice = datetime.strptime(time_last_slice, "%H%M%S.%f")
     formatted_last_time_last_slice = last_obj_last_slice.strftime("%H:%M:%S.%f")[:-3]
     
-    # Differenz zwischen First Slice und Bellow
+    # Difference between first slice and resp. bellow
     real_time_bellow_formatted = datetime.strptime(real_time_bellow, '%H:%M:%S.%f')
     bellow_sr = 0.0025
     # Differenz vom Bellow/EKG Startzeitpunkt bis zum ersten slice, berechnet wird 
@@ -115,7 +111,7 @@ def cut_bellow_data(sig_rb ,AT, real_time_bellow):
     return sig_rb
 
 def cut_spiro(indizes_filename, spiro_npy_filename,AT, zeit_start_zeitstempel_spiro, manuelle_verschiebung_s):
-    # Cuttet die Spiro/Volumendaten ab dem ZEitstempel, und noch alles bis zum ersten 
+    # Cuts spiro and volumetry data based on timestamp
     indizes = np.load(f'{indizes_filename}')
     index_spiro = indizes[1]
     spiro_vol = np.load(f'{spiro_npy_filename}')
@@ -134,13 +130,12 @@ def cut_spiro(indizes_filename, spiro_npy_filename,AT, zeit_start_zeitstempel_sp
     print(f"Der Slice beginnt {t1}")
     t2 = datetime.strptime(zeit_start_zeitstempel_spiro, "%H:%M:%S")
     t3 = datetime.strptime(formatted_last_time_last_slice, "%H:%M:%S.%f")
-    # Differenz zwischen zeitstempel aus index von spiro mit erstem slice berechnen
+    # Difference between timestamp from index out of spiro data with first slice
     diff = t1 - t2
     diff_seconds = diff.total_seconds()
-    # Acquisition time ist die Zeit mittig von der 33ms Abtastrate
     print(f"Difference: {diff_seconds} Sekunden")
     
-    # Zeit zwischen letzten slice und erstem slice, also länge der zeit von einer schicht
+    # Duration of one slice
     diff_zeit_seconds_between_first_last = (t3 - t1).total_seconds()
     print(f"Zeitspanne SliceVolumen: {diff_zeit_seconds_between_first_last}")
     
@@ -160,18 +155,20 @@ def cut_spiro(indizes_filename, spiro_npy_filename,AT, zeit_start_zeitstempel_sp
 
 def berechne_zeitinformationen(acquisition_times, startzeit_spiro):
     """
-    Berechnet Zeitdifferenzen zwischen dem Beginn der Spiro-Aufzeichnung 
-    und dem ersten sowie letzten MRT-Bild (Slice).
+    Calculates the time differences between the start of the spiro recording and the first and last MRI image (slice).
 
-    Parameter:
-    - acquisition_times: Liste von [SliceIndex, Uhrzeit] mit Uhrzeit im Format HHMMSS.fff
-    - startzeit_spiro: Startzeitpunkt der Spiro-Messung im Format HH:MM:SS
-
-    Rückgabe:
-    - Dictionary mit formatierten Zeitpunkten und berechneten Zeitdifferenzen
+    Parameters:
+    
+    acquisition_times: List of [slice_index, time], where time is in the format HHMMSS.fff
+    
+    startzeit_spiro: Start time of the spiro measurement in the format HH:MM:SS
+    
+    Returns:
+    
+    A dictionary containing the formatted timestamps and the calculated time differences.
     """
 
-    # Zeit des ersten und letzten Slices extrahieren und formatieren
+    # Extract and change time format
     zeit_erster_slice_raw = str(acquisition_times[0][1])
     zeit_letzter_slice_raw = str(acquisition_times[-1][1])
 
@@ -184,11 +181,11 @@ def berechne_zeitinformationen(acquisition_times, startzeit_spiro):
     # Startzeitpunkt der Spiro-Aufzeichnung in datetime-Objekt umwandeln
     zeit_start_spiro_obj = datetime.strptime(startzeit_spiro, "%H:%M:%S")
 
-    # Zeitdifferenzen berechnen
+    # Calculate time differences
     differenz_start_spiro_zu_erstem_slice = (zeit_obj_erster_slice - zeit_start_spiro_obj).total_seconds()
     differenz_erster_zu_letzter_slice = (zeit_obj_letzter_slice - zeit_obj_erster_slice).total_seconds()
 
-    # Ausgabe
+    # Output
     print(f"Erster Slice beginnt um {zeit_erster_slice_fmt}")
     print(f"Differenz Spirostart zu erstem Slice: {differenz_start_spiro_zu_erstem_slice:.3f} s")
     print(f"Zeitspanne zwischen erstem und letztem Slice: {differenz_erster_zu_letzter_slice:.3f} s")
