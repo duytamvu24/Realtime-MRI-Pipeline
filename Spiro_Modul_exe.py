@@ -1,5 +1,3 @@
-# BC_Spiro_Functions_flow_npy_general liegt hier zwei Ordnerstufen vor dieser Datei. Wenn die Dateien im gleichen Ordner liegen, können die Pünktchen
-# und die Backslashes entfernt werden
 import funktionen
 import numpy as np
 import tkinter as tk
@@ -9,7 +7,7 @@ import analysen
 from tkinter import filedialog
 from scipy.signal import find_peaks
 
-# Globale Variablen
+# Global variables
 datei = None
 spiro_resorted = None
 start_time_str = None
@@ -73,7 +71,7 @@ analyse
     label_status_kanal.pack()
 
     def run_belastung_analyses():
-        # Erstellt eine Textdatei mit allen Ergebnissen, um diese darein zu schreiben
+        # Creates text file to fill in the results
         file_name = "Results_Exercisephase"
         with open(file_name, "w") as file:
             file.write("Wrting Results\n")
@@ -116,7 +114,7 @@ analyse
     
 
     def run_ruhe_analyses():
-        # Erstellt eine Textdatei mit allen Ergebnissen, um diese darein zu schreiben
+        # Creates text file to fill in results
         file_name = "Results_Restingphase"
         with open(file_name, "w") as file:
             file.write("Wrting Results\n")
@@ -189,7 +187,7 @@ def start_app():
     open_channel_selection()
 
 
-# GUI zur Parameter-Eingabe
+# GUI for parameter selection
 root = tk.Tk()
 root.title("Spiro-Module")
 
