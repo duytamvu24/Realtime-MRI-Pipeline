@@ -17,7 +17,7 @@ def read_spiro_file(filename_spiro):
     return spiro_resorted
 
 
-# Window to select Files
+# ---------------- File selection window ----------------
 def choose_files():
     def select_ecg():
         filename = filedialog.askopenfilename(title="Select ECG-File", filetypes=[("All Files", "*.*")])
@@ -48,19 +48,19 @@ def choose_files():
     frm = ttk.Frame(root, padding=20)
     frm.pack(fill=tk.BOTH, expand=True)
 
-    # EKG-File
+    # ECG file
     ttk.Label(frm, text="ECG-File:").grid(row=0, column=0, sticky="w")
     entry_ecg = ttk.Entry(frm, width=50)
     entry_ecg.grid(row=0, column=1, padx=5)
     ttk.Button(frm, text="Select", command=select_ecg).grid(row=0, column=2)
 
-    # EKG-File
+    # ECG channel selection
     ttk.Label(frm, text="ECG-File:").grid(row=1, column=0, sticky="w")
     spin_ecg_channel = ttk.Spinbox(frm, from_=1, to=4, width=5)
-    spin_ecg_channel.set(2)  # Default-Wert
+    spin_ecg_channel.set(2)  # default value
     spin_ecg_channel.grid(row=1, column=1, sticky="w", padx=5)
     
-    # Spiro-File
+    # Spiro file
     ttk.Label(frm, text="Spiro-File:").grid(row=2, column=0, sticky="w")
     entry_spiro = ttk.Entry(frm, width=50)
     entry_spiro.grid(row=2, column=1, padx=5)
@@ -71,31 +71,31 @@ def choose_files():
     root.mainloop()
 
 
-# Main-Window
+# Main window
 def launch_main_window(filename, filename_spiro, ecg_kanal):
     global root, signals, x_datas, clicked_points, time_stamp, current_signal_index, data, spiro_resorted, log_start_time
 
-    # Chosse File
+    # Load selected files
     data, log_start_time = read_ecg_file(filename)
     spiro_resorted = read_spiro_file(filename_spiro)
     
-    # different ekg-channels can be selected, 
+    # Different ECG channels can be selected
     signals = [
-        data[4+int(ecg_kanal)::4],              # ECG Daten
-        spiro_resorted[1]        # Spiro Daten
+        data[4+int(ecg_kanal)::4],              # ECG data
+        spiro_resorted[1]                       # Spiro data
     ]
 
     x_datas = [
-        np.arange(len(signals[0])) * 0.0025,   # ECG Timeline
-        np.arange(len(signals[1])) * 0.008     # Spiro Timeline
+        np.arange(len(signals[0])) * 0.0025,   # ECG timeline
+        np.arange(len(signals[1])) * 0.008     # Spiro timeline
     ]
 
-    # Click-Peaks
+    # Clicked peak storage
     clicked_points = []
     time_stamp = []
     current_signal_index = 0
 
-    # Tkinter Plot
+    # Tkinter plot
     def find_nearest_point(x_click, x_data, y_data):
         idx = (np.abs(x_data - x_click)).argmin()
         return idx, y_data[idx]
@@ -119,7 +119,7 @@ def launch_main_window(filename, filename_spiro, ecg_kanal):
 
         if time_stamp:
             x_pts, y_pts = zip(*time_stamp)
-            ax.scatter(x_data[list(x_pts)], y_pts, color="red", s=100, label="Punkt")
+            ax.scatter(x_data[list(x_pts)], y_pts, color="red", s=100, label="Point")
 
         xmin = slider_min.get()
         xmax = slider_max.get()
@@ -135,7 +135,7 @@ def launch_main_window(filename, filename_spiro, ecg_kanal):
         global current_signal_index
         if time_stamp:
             clicked_points.append(time_stamp.copy())
-            print(f"Signal {current_signal_index+1}: Punkt gespeichert {time_stamp[0]}")
+            print(f"Signal {current_signal_index+1}: Point saved {time_stamp[0]}")
 
             current_signal_index += 1
             if current_signal_index < len(signals):
@@ -157,10 +157,10 @@ def launch_main_window(filename, filename_spiro, ecg_kanal):
     def final_correlation():
         print("\n--- Start temporal correlation ---")
     
-        # Vorherigen Plot entfernen
+        # Remove previous plot
         canvas.get_tk_widget().destroy()
     
-        time_stamp_ecg = clicked_points[0][0]  # (Index, Wert)
+        time_stamp_ecg = clicked_points[0][0]  # (index, value)
         time_stamp_spiro = clicked_points[1][0]
         
         
@@ -177,7 +177,7 @@ def launch_main_window(filename, filename_spiro, ecg_kanal):
         mean_ecg = np.mean(ecg_from_timestamp)
         mod_ecg_data = [((y - mean_ecg)/scaling_factor) + 1 for y in ecg_from_timestamp]
     
-        # --- Frame für finalen Plot ---
+        # Frame for final plot
         result_frame = ttk.LabelFrame(root, text="Overlapping signals")
         result_frame.pack(fill=tk.BOTH, expand=True, padx=10, pady=10)
     
@@ -201,21 +201,27 @@ def launch_main_window(filename, filename_spiro, ecg_kanal):
             ax2.set_xlim([xmin, xmax])
             canvas2.draw()
     
-        # function to save data points
+        # function to save correlated data
         def save_correlated_data():
-            #Volumen aus Fluss
+
+            # calculate volume from flow
             spiro_vol = get_volume_from_flow(spiro_resorted[1])
             
-            # Indizes der gewählten Punkte
+            # indices of selected points
             time_stamp_ecg = clicked_points[0][0][0]
             time_stamp_spiro = clicked_points[1][0][0]
             indizes = [time_stamp_ecg, time_stamp_spiro]
+
             ecg_real_time_time_stamp = (2.5 / 1000) * time_stamp_ecg
+
             real_time_ecg1 = timeConverter(log_start_time)
+
             time_format = "%H:%M:%S"
             print(real_time_ecg1)
+
             real_time_ecg1 = real_time_ecg1[:8]
             time_object = datetime.strptime(real_time_ecg1, time_format)
+
             new_time = time_object + timedelta(seconds=ecg_real_time_time_stamp)
             
             np.save("timestamp.npy", new_time)
@@ -239,7 +245,7 @@ def launch_main_window(filename, filename_spiro, ecg_kanal):
         save_data_btn = ttk.Button(result_frame, text="Save data", command=save_correlated_data)
         save_data_btn.pack(pady=5)
 
-    # Main Window
+    # --- GUI ---
     root = tk.Tk()
     root.title("Temporal-Correlation")
 
@@ -269,7 +275,7 @@ def launch_main_window(filename, filename_spiro, ecg_kanal):
     save_btn = ttk.Button(button_frame, text="Save points and next plot", command=save_point_and_next)
     save_btn.pack(side=tk.LEFT, padx=5)
 
-    # Start mit erstem Signal
+    # Start with the first signal
     load_signal(0)
 
     root.mainloop()
@@ -278,4 +284,3 @@ def launch_main_window(filename, filename_spiro, ecg_kanal):
 # ---------------- Start ----------------
 if __name__ == "__main__":
     choose_files()
-
