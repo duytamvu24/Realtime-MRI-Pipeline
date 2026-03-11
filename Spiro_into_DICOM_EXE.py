@@ -412,7 +412,6 @@ def ask_user_inputs():
     ttk.Entry(frame, textvariable=n_ecg_phasen, width=20).grid(row=row, column=1, sticky="w")
     row += 1
 
-    # --- Textfeld für Logs ---
     log_box = tk.Text(frame, height=12, width=70, wrap="word")
     log_box.grid(row=row, column=0, columnspan=3, pady=10)
     row += 1
