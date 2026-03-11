@@ -1,7 +1,8 @@
-# Import Helperfunctions
+# Import helper functions for signal processing and correlation
 from finetuning_functions import *
 from korrelation_functions_exe import *
-#Import libraries
+
+# Import required libraries
 import tkinter as tk
 from tkinter import filedialog, messagebox
 import os
@@ -13,19 +14,25 @@ from matplotlib.widgets import Slider
 import matplotlib.patches as patches
 from matplotlib.path import Path
 
-# --- GUI-Logic ---
+# --- GUI Logic ---
+
+# Dictionary for storing file paths selected in the GUI
 params = {}
+
 # Global variables
-# paraters for saving data of roi
-roi_points = []
-roi_polygon = None
-roi_plot = None
-point_plots = []
-# parameters to save dicom data
+
+# ROI parameters
+roi_points = []        # List storing clicked ROI points
+roi_polygon = None     # Polygon defining the ROI
+roi_plot = None        # Plot handle for the ROI polygon
+point_plots = []       # Plot handles for clicked points
+
+# Variables for DICOM data
 ArrayDicomsort = None
 AT = None
 vol = None
 
+# GUI control variables
 plot_initialized = False
 shift_entry = None
 shift_button = None
@@ -103,11 +110,11 @@ def start_analysis():
     slice_init = 100
     max_slice = ArrayDicomsort.shape[2] - 1
 
-    # --- Figure für Tkinter erstellen ---
+    # figure for Tkinter
     fig, ax = plt.subplots()
     img = ax.imshow(ArrayDicomsort[:, :, slice_init], cmap='grey')
 
-    # Click-Handler for ROI
+    # click-handler for roi
     def onclick(event):
         # function to enable clicking in the images to create a roi
         global roi_points, roi_polygon, roi_plot, point_plots
@@ -116,20 +123,12 @@ def start_analysis():
             p, = ax.plot(event.xdata, event.ydata, "ro")  # Punkte speichern
             point_plots.append(p)
             fig.canvas.draw()
-
             if len(roi_points) == 4:
-                # Delete old ROI
                 print(roi_points, roi_plot)
-
-                # Polygon zeichnen
                 xs, ys = zip(*roi_points)
                 roi_plot, = ax.plot(list(xs) + [xs[0]], list(ys) + [ys[0]], "r-")
                 fig.canvas.draw()
-
-                # ROI als Path speichern
                 roi_polygon = Path(roi_points)
-
-                # automatically calculates curves
                 plot_signal_curve()
 
     fig.canvas.mpl_connect("button_press_event", onclick)
@@ -202,7 +201,6 @@ def finetuning():
     time_last_image = float(time_last_image)
     hms = int(time_last_image)  
     ms = round((time_last_image - hms) * 1000)  # weil 4 Nachkommastellen
-    # Zerlegen in h, m, s
     hours = hms // 10000
     minutes = (hms % 10000) // 100
     seconds = hms % 100
@@ -246,16 +244,11 @@ def finetuning():
     sig_rb_cut = sig_rb[diff_bellow_start_to_first_image_steps : diff_bellow_start_to_first_image_steps + duration_slice_bellow_steps ]
     sig_rb_cut = sig_rb_cut / np.mean(sig_rb_cut) 
     print("sig_rb_cut:" + str(len(sig_rb_cut)))
-    # Create timelines for different channels
     import numpy as np
-    # Zeitskala der Bilder
-    # zweite Spalte extrahieren
     times = AT[:, 1]
-    
-    
+
     from datetime import time
-    
-    
+
     def to_seconds(val):
         hms = int(val)
         frac = val - hms
@@ -272,7 +265,7 @@ def finetuning():
     # new timeline to show cut data of spiro, bellow and signalintensivity curve
     diffs = [s - seconds_list[0] for s in seconds_list]
     timescale_images = [diff*1000 for diff in diffs]
-    # timescale bellow
+    # Timescale bellow
     import numpy as np
     scale_bellow = np.arange(0, int(len(sig_rb_cut) * 2.5), 2.5)
     scale_flow = np.arange(0, int(len(spiro_flow) * 8), 8)
@@ -282,7 +275,7 @@ def finetuning():
     # Plot curve
     for widget in curve_frame.winfo_children():
             widget.destroy()
-    # neue Kurve erstellen
+
     fig, ax = plt.subplots(figsize=(8, 4))
     ax.plot(scale_spiro,spiro_vol, label='Volumen of Volumetry', linewidth=2)
     ax.plot(scale_bellow,sig_rb_cut, label='Respiratory Bellow', alpha=0.7)
@@ -312,7 +305,6 @@ def finetuning():
             hover_label.config(text="x: -")
 
     fig.canvas.mpl_connect("motion_notify_event", on_hover)
-    # Canvas in Tkinter einfügen
     canvas = FigureCanvasTkAgg(fig, master=curve_frame)
     canvas.draw()
     canvas.get_tk_widget().pack(fill=tk.BOTH, expand=True)
@@ -376,14 +368,13 @@ def plot_everything():
     time_last_image = float(time_last_image)
     hms = int(time_last_image)  
     ms = round((time_last_image - hms) * 1000)  # weil 4 Nachkommastellen
-    # Zerlegen in h, m, s
     hours = hms // 10000
     minutes = (hms % 10000) // 100
     seconds = hms % 100
     time_last_image = datetime(1900, 1, 1, hours, minutes, seconds) + timedelta(milliseconds=ms)
     duration_slice = int((time_last_image - time_first_slice).total_seconds() * 1000)
     
-    print(f"Duration of Slices: {duration_slice}")
+    print(f"Dauer des Slices: {duration_slice}")
 
     offset_finetuning = int(shift)
     print("offset_ ist:" + str(offset_finetuning))
@@ -401,8 +392,6 @@ def plot_everything():
     
     spiro_vol = get_volume_from_flow(spiro_flow)
     import numpy as np
-    # Zeitskala der Bilder
-    # zweite Spalte extrahieren
     times = AT[:, 1]
     
     
@@ -451,7 +440,7 @@ def plot_everything():
     ax.grid(True)
 
 
-    # Hover function
+    # --- Hover-function ---
     if hover_label is None:
         hover_label = tk.Label(root, text="x: -", font=("Arial", 10))
         hover_label.pack(pady=8)
@@ -460,30 +449,22 @@ def plot_everything():
         if event.inaxes == ax and event.xdata is not None:
             x_val = event.xdata
             hover_label.config(text=f"x: {x_val:.1f}")
-            
-            # x-Wert muss als Sequenz übergeben werden:
             hover_line.set_xdata([x_val])
             fig.canvas.draw_idle()
         else:
             hover_label.config(text="x: -")
 
     fig.canvas.mpl_connect("motion_notify_event", on_hover)
-    # Start scale
     window = 40000
     ax.set_xlim(0, window)
-
-    # Canvas into Tkinter
     canvas = FigureCanvasTkAgg(fig, master=curve_frame)
     canvas.draw()
     canvas.get_tk_widget().pack(fill="both", expand=True)
-
-    # Scroll function
     def update(val):
         pos = slider.get()
         ax.set_xlim(pos, pos + window)
         canvas.draw_idle()
 
-    # Slider
     slider = tk.Scale(
         slider_frame,
         from_=0,
@@ -517,8 +498,6 @@ def reset_roi():
     for p in point_plots:
         p.remove()
     point_plots = []
-
-    # Alte Kurve löschen
     for widget in curve_frame.winfo_children():
         widget.destroy()
 
@@ -536,20 +515,16 @@ def plot_signal_curve():
     if roi_polygon is None:
         return  # Noch keine ROI gesetzt
 
-    # Maske für ROI erstellen
     ny, nx = ArrayDicomsort.shape[0], ArrayDicomsort.shape[1]
     X, Y = np.meshgrid(np.arange(nx), np.arange(ny))
     coords = np.vstack((X.flatten(), Y.flatten())).T
     mask = roi_polygon.contains_points(coords).reshape((ny, nx))
 
-    # Mittelwert pro Frame berechnen
     vol = [np.mean(ArrayDicomsort[:, :, i][mask]) for i in range(ArrayDicomsort.shape[2])]
 
-    # delete old curves
     for widget in curve_frame.winfo_children():
         widget.destroy()
 
-    # plot new curve
     fig2, ax2 = plt.subplots()
     ax2.plot(vol, color="blue")
     ax2.set_title("Signal intensivity curve (ROI)")
@@ -562,7 +537,7 @@ def plot_signal_curve():
 
     collecting_roi = False  # Nach 4 Punkten fertig
 
-# Tkinter window
+# TKinter window
 root = tk.Tk()
 root.title("Finetuning-Module")
 root.geometry("1200x700")
@@ -576,7 +551,6 @@ plot_frame.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
 curve_frame = tk.Frame(root)
 curve_frame.pack(side=tk.RIGHT, fill=tk.BOTH, expand=True)
 
-# Buttons und Eingaben
 tk.Button(control_frame, text="Select Dicom folder", command=select_dicom_folder).pack(pady=2)
 dicom_label = tk.Label(control_frame, text="No DICOM folder selected yet")
 dicom_label.pack()
@@ -612,6 +586,5 @@ hover_label.pack(pady=9)
 
 slider_frame = tk.Frame(root)
 slider_frame.pack(pady=10)
-
 
 root.mainloop()
