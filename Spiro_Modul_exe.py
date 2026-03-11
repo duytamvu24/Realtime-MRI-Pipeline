@@ -7,7 +7,7 @@ import analysen
 from tkinter import filedialog
 from scipy.signal import find_peaks
 
-# Global variables
+# Globale Variablen
 datei = None
 spiro_resorted = None
 start_time_str = None
@@ -24,7 +24,6 @@ def open_channel_selection():
     
     kanal_window = tk.Toplevel(root)
     kanal_window.title("Select channel")
-analyse
     tk.Label(kanal_window, text="Please select a channel (1-4):").pack()
     legende_text = """
     Channel 1: FLow in L/s
@@ -71,7 +70,7 @@ analyse
     label_status_kanal.pack()
 
     def run_belastung_analyses():
-        # Creates text file to fill in the results
+        # Erstellt eine Textdatei mit allen Ergebnissen, um diese darein zu schreiben
         file_name = "Results_Exercisephase"
         with open(file_name, "w") as file:
             file.write("Wrting Results\n")
@@ -114,7 +113,7 @@ analyse
     
 
     def run_ruhe_analyses():
-        # Creates text file to fill in results
+        # Erstellt eine Textdatei mit allen Ergebnissen, um diese darein zu schreiben
         file_name = "Results_Restingphase"
         with open(file_name, "w") as file:
             file.write("Wrting Results\n")
@@ -187,7 +186,7 @@ def start_app():
     open_channel_selection()
 
 
-# GUI for parameter selection
+# GUI zur Parameter-Eingabe
 root = tk.Tk()
 root.title("Spiro-Module")
 
@@ -231,3 +230,4 @@ label_status = tk.Label(root, text="", fg="black")
 label_status.pack()
 
 root.mainloop()
+
