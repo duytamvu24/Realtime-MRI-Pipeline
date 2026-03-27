@@ -110,7 +110,7 @@ def start_analysis(params, log_widget):
     # Millisekunden seit Mitternacht berechnen
     msnmn = (dicomtime.hour * 3600000 + dicomtime.minute * 60000 + dicomtime.second * 1000 + dicomtime.microsecond / 1000)
     
-    log(f"Das entspricht {msnmn} ms nach Mitternacht!")
+    log(f"This corresponds to {msnmn} ms after midnight!")
     # MRI STart in ms nach Mitternacht für Start MRI
 
     # calculate timestamps for the respiratory flow measurements 
@@ -196,7 +196,7 @@ def start_analysis(params, log_widget):
     k = []
     for i in scans_sort:
         l = []
-        log(f"Reinschreiben in {i}")
+        log(f"Filling in {i}")
         for j in scans_sort[i]:
             current_scan = scans_sort[i][j]
             #print(current_scan)
@@ -248,8 +248,8 @@ def start_analysis(params, log_widget):
         for j in scans_sort[i]:
             # scan j
             count += 1
-    log(f"TEST: Anzahl Bilder: {count}")
-    log("Aufteilen der Bilder in Endexspiration und jeweils ein Bild aus jeder EKG-Klasse, wo das Volumen unter dem angegebenen threshold ist!")
+    log(f"TEST: Number of Images: {count}")
+    log("Splitting images into end-exspiration and ECG classes, where volume is under given threshold!")
     log("Selecting image in desired respiratory phase. For each ECG-class one image will be selected with a volume closest to the threshold!")
     min_vol, max_vol = np.min(ecg_v_f.reshape(-1,3)[:,1]), np.max(ecg_v_f.reshape(-1,3)[:,1])
     
@@ -265,36 +265,70 @@ def start_analysis(params, log_widget):
     count = 0
     count_less_24 = 0
     # binning ecg group in exspiration
+    import pandas as pd
+    
+    # Dictionary for counts
+    count_dict = {}
     for i in scans_sort:
         for j in scans_sort[i]:
             count += 1
             current_scan = scans_sort[i][j]
             ecg = float(str(current_scan.get_item((0x18, 0x1060)).value).strip('b\''))
-            # +16.5ms, da trigger time mittig vom scan ist 
+            
             ecg_group = int((ecg+16.5)//divider_ruhe)
             if ecg_group == n_ecg_phasen:
                 ecg_group = 0
+    
             if ecg_group <= n_ecg_phasen - 1:
-                # Zählt wie viele in 24 oder darunter sind
                 count_less_24 += 1
-                # aber es gibt doch bereits die ecg gruppe
+    
+                if i not in count_dict:
+                    count_dict[i] = {}
+                if ecg_group not in count_dict[i]:
+                    count_dict[i][ecg_group] = 0
+    
                 if ecg_group not in scans_sort_by_ecg[i].keys():
                     scans_sort_by_ecg[i][ecg_group] = [{'min_th':[], 'over_th':[],},
                                                       {'min_th':[], 'over_th':[]}]
-                    #print(f"extra_bin hinzugefügt {i}, {ecg_group}")
+    
                 if float(current_scan.get_item((0x08, 0x03)).value) <= 0:
                     # exspiration
                     vol = float(current_scan.get_item((0x08, 0x04)).value)
-                    if vol<=(mean_volume * threshold_volume):
+    
+                    if vol <= (mean_volume * threshold_volume):
                         
                         scans_sort_by_ecg[i][ecg_group][1]['min_th'].append(current_scan)
+                        count_dict[i][ecg_group] += 1
+    
                     elif vol < mean_volume and vol > (mean_volume * threshold_volume):
                         scans_sort_by_ecg[i][ecg_group][1]['over_th'].append(current_scan)
+
+    # write number of images per slice in endexspiration into excel file
+    rows = []
+
+    for slice_name, ecg_groups in count_dict.items():
+        for ecg_group, count_val in ecg_groups.items():
+            rows.append({
+                "Slice": slice_name,
+                "ECG_Group": ecg_group,
+                "Count_EndExpiration": count_val
+            })
+    
+    df = pd.DataFrame(rows)
+    
+    # Optional sortieren
+    df = df.sort_values(by=["Slice", "ECG_Group"])
+    
+    # Excel speichern
+    output_path = main_path + "endexpiratory_counts.xlsx"
+    df.to_excel(output_path, index=False)
+    
+    log(f"Excel file saved: {output_path}")
                         
     log(f'{count_less_24}images kept')
     log(f'{count} images processed')
     log("Exporting data: For each ECG class, images at end-expiration with the smallest volume are selected. Missing entries will be filled.")
-    # only export scans that have a respiratory volume clostest to the center of the bin
+    # only export scans that have a respiratory volume closest to the center of the bin
     # binning of endexspiration depending on mean tidal volume 
     for slc in scans_sort_by_ecg:
         # iterates through slice
@@ -318,7 +352,7 @@ def start_analysis(params, log_widget):
                     idx = np.argmin(distances)
                     to_export = group[idx]
                 else:
-                    log(f'empty bin: {vol_group}, in Schicht {slc},für die EKG-Gruppe: {ecg_group}')
+                    log(f'empty bin: {vol_group}, in Slice {slc},for ECG group: {ecg_group}')
                     to_export = find_closest_from_other_bin(mid, scans_sort_by_ecg, 
                                                               vol_group, slc, ecg_group)
                     
