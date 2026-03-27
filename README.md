@@ -200,9 +200,9 @@ Spirometry and ECG signals are now plotted together:
 
 ### Step 3: Run Finetuning_Korrelation_EXE
 <p align="center">
+  <img src="readme_bilder/finetuning1.PNG" width="400" style="margin-right:10px;">
   <img src="readme_bilder/finetuning2.PNG" width="400" style="margin-right:10px;">
-  <img src="readme_bilder/finetuning3.PNG" width="400" style="margin-right:10px;">
-  <img src="readme_bilder/finetuning4.PNG" width="600">
+  <img src="readme_bilder/finetuning3.PNG" width="600">
 </p>
 
 #### 3.1 Select Input Data
