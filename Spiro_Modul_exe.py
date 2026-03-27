@@ -55,7 +55,7 @@ def open_channel_selection():
 
             # PeakRemoverApp starten
             peak_window = tk.Toplevel(kanal_window)
-            peak_window.title(f"Kanal {kanal} - PeakRemover")
+            peak_window.title(f"Channel {kanal} - PeakRemover")
             app = PeakRemoverApp(peak_window, time, data, peaks, kanal, show_atempause=False)
             peak_window.mainloop()
 
@@ -188,7 +188,7 @@ def start_app():
 
 # GUI zur Parameter-Eingabe
 root = tk.Tk()
-root.title("Spiro-Module")
+root.title("Spiro Module")
 
 #Design des ersten Fensters:
 tk.Label(root, text = "Please enter the Measurement-Times! Exp: 18:10:40").pack()
