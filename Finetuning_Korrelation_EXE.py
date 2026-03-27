@@ -191,7 +191,7 @@ def finetuning():
     diff_ms_timestamp_first_slice = (time_first_slice - timestamps).total_seconds() * 1000
     diff_ms_timestamps = int(diff_ms_timestamp_first_slice/8)
     print(
-        f"Differenz vom Zeitstempel bis zum ersten Bild: {diff_ms_timestamp_first_slice:.2f} ms und {(diff_ms_timestamp_first_slice/60000):.2f} min \n"
+        f"Time Difference between timestamp and first image: {diff_ms_timestamp_first_slice:.2f} ms und {(diff_ms_timestamp_first_slice/60000):.2f} min \n"
         f"Startzeit Timestamp: {timestamps}\n"
         f"Uhrzeit vom ersten Bild: {time_first_slice}"
     )
@@ -208,7 +208,7 @@ def finetuning():
     time_last_image = datetime(1900, 1, 1, hours, minutes, seconds) + timedelta(milliseconds=ms)
     duration_slice = int((time_last_image - time_first_slice).total_seconds() * 1000)
     
-    print(f"Dauer des Slices: {duration_slice}")
+    print(f"Duration of Slice: {duration_slice}")
 
     # Cut spiro data
     shift = 0
@@ -231,7 +231,7 @@ def finetuning():
     spiro_flow = spiro_resorted[1][(indizes[1] + diff_ms_timestamps + offset_finetuning) : (indizes[1] + diff_ms_timestamps + offset_finetuning) + duration_slice_steps]
     spiro_vol = get_volume_from_flow(spiro_flow)
     print(
-        f"Schritten vom Timestamp bis slice: {diff_ms_timestamps} und in min {(diff_ms_timestamps*8/60000):.2f}\n"
+        f"Timesteps from Timestamp to slice: {diff_ms_timestamps} und in min {(diff_ms_timestamps*8/60000):.2f}\n"
         f"  Schritte durch Timestamp: {indizes[1]}\n"
         f"  Insgesamtes Schneiden:  {(indizes[1] + diff_ms_timestamps) * 8 / 60000:.2f}"
     )
