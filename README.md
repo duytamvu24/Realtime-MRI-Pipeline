@@ -171,7 +171,7 @@ Repeat the steps from **1.2** by clicking **“Starte Analyse Belastung”**.
 <p align="center">
   <img src="readme_bilder/korrelation1.PNG" width="400" style="margin-right:10px;">
   <img src="readme_bilder/korrelation2.PNG" width="400" style="margin-right:10px;">
-  <img src="readme_bilder/korrelation5.PNG" width="400">
+  <img src="readme_bilder/korrelation3.PNG" width="400">
 </p>
 
 
