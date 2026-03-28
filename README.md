@@ -130,7 +130,7 @@ These image sequences can subsequently be analyzed in **Circle** and compared wi
 - Enter the **start and end time** of rest and exercise phase: `hh:mm:ss` (e.g. `00:00:00`)
 - Enter **body weight** (kg) and **height** (cm)  
   Example: `60` and `180`
-- Click **“Datei auswählen & Start”** and select the spirometry file
+- Click **“Choose Spirofile and Start”** and select the spirometry file
 
 If the exact times are not known yet:
 
@@ -144,13 +144,13 @@ If the exact times are not known yet:
 ---
 
 #### 1.2 Run Analysis – Rest Phase
-Click **“Starte Analyse Ruhe”** to begin the resting phase analysis.
+Click **“Start Rest-Analysis”** to begin the resting phase analysis.
 
 For each signal:
 - A new window opens showing the signal with automatically detected peaks
-- Click **“Entferne Peaks”** and remove incorrect peaks by clicking on the red markers
-- Click **“Peaks manuell hinzufügen”** to add missing peaks by clicking into the plot
-- Click **“Speichern der Änderungen”** to save the corrections and close the window
+- Click **“Remove Peaks”** and remove incorrect peaks by clicking on the red markers
+- Click **“Add peaks manually”** to add missing peaks by clicking into the plot
+- Click **“Save changes”** to save the corrections and close the window
 
 This procedure is repeated **four times** for:
 1. Respiratory volume  
@@ -163,7 +163,7 @@ After the fourth window is closed, an **Excel file** is generated containing all
 ---
 
 #### 1.3 Run Analysis – Exercise Phase
-Repeat the steps from **1.2** by clicking **“Starte Analyse Belastung”**.
+Repeat the steps from **1.2** by clicking **“Start Exercise-Analysis”**.
 
 ---
 
@@ -185,15 +185,15 @@ Repeat the steps from **1.2** by clicking **“Starte Analyse Belastung”**.
 #### 2.2 Correlate Timestamps
 - A new window displaying the ECG signal will open
 - Adjust the view using the sliders if necessary
-- Activate **“Punkt setzen aktivieren”**
+- Activate **“Activate Selecting Points”**
 - Click on the timestamp start in the ECG plot
-- Click **“Punkt speichern & nächster Graph”**
+- Click **“Save points and next plot”**
 - The spirometry signal will be displayed
 - Click on the corresponding timestamp start in the spirometry plot
-- Click **“Punkt speichern & nächster Graph”**
+- Click **“Save points and next plot”**
 
 Spirometry and ECG signals are now plotted together:
-- If the correlation is correct, click **“Daten speichern”**
+- If the correlation is correct, click **“Save data”**
 - If not, restart the program and repeat the procedure
 
 ---
@@ -218,7 +218,7 @@ Spirometry and ECG signals are now plotted together:
 ---
 
 #### 3.2 Inspect Global Correlation
-- Click **“1. Betrachte ganze Kurve”**
+- Click **“1. Plot complete data”**
 - Spirometry and respiratory belt signals are plotted together
 - Visually assess whether a temporal shift is required
 
@@ -229,15 +229,15 @@ Spirometry and ECG signals are now plotted together:
 - Determine the required shift between signals
 - Divide the time difference by **8** to convert to timestamp units
 - Enter the calculated value below the slider
-- Click **“1. Betrachte ganze Kurve”** again to verify
+- Click **“1. Plot complete data”** again to verify
 
 ---
 
 #### 3.4 ROI-Based Verification
-- Click **“2. Betrachte einzelne Schichten”**
+- Click **“2. Look through slice”**
 - A window showing all images of the selected slice opens
-- Click **“Setze ROI”** and select the ROI in the correct order
-- Click **“Speichere Signalkurve!”**
+- Click **“Select ROI”** and select the ROI in the correct order
+- Click **“Save Signalintensivity curve!”**
 
 The following curves are plotted:
 - Signal intensity curve (ROI)
@@ -257,16 +257,16 @@ If necessary, repeat the shift adjustment using the new plot.
 ### Step 4: Run Spiro_into_Dicom_EXE
 ![Spiro_into_Dicom](readme_bilder/spiro_into_dicom.PNG)
 #### 4.1 Select Required Files and Parameters
-- **Main-Pfad**: output directory for processed images
-- **Dicom-Pfad**: folder containing real-time DICOM images
-- **Spirodatei**: spirometry file
+- **Main-path**: output directory for processed images
+- **Dicom path**: folder containing real-time DICOM images
+- **Spirofile**: spirometry file
 - `timestamp.npy`
 - `indices.npy`
 - **RR interval (ms)**: e.g. `1000`
 - **Mean tidal volume (L)**: value from Excel file generated in Step 1
 - **Threshold volume**:  Defines end-expiration condition  
-- **Manuelle Verschiebung (Zeitschritte)**: fine-tuning shift from Step 3
-- **Anzahl EKG-Phasen**: number of ECG phases per slice
+- **Manuel shift (timestamps)**: fine-tuning shift from Step 3
+- **Number of ECG-Phases**: number of ECG phases per slice
 
 ---
 
